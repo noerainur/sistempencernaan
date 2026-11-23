@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Petualangan Sistem Pencernaan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg1:#bde7ff;--bg2:#e9ffd8;--card:#fff;--tx:#1b2a41;--ac:#ff7a1a;--ok:#2bb673;--okbg:#d9f7e6;--no:#e5484d;--ln:#6a8fb0;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg1:#0f2238;--bg2:#17321f;--card:#22344d;--tx:#f2f6ff;--okbg:#17432d;--ln:#8fb3d6;color-scheme:dark}}
+:root[data-theme="dark"]{--bg1:#0f2238;--bg2:#17321f;--card:#22344d;--tx:#f2f6ff;--okbg:#17432d;--ln:#8fb3d6;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;overflow:hidden}
+html{font-size:min(2.2vh,1.25vw)}
+body{font-family:'Fredoka',system-ui,sans-serif;background:linear-gradient(160deg,var(--bg1),var(--bg2));color:var(--tx)}
+#app{height:100%;display:flex;flex-direction:column;padding:1rem 1.6rem;gap:.7rem}
+#hud{display:flex;gap:1rem;align-items:center}
+#hud b{flex:1;font-size:1.8rem}
+.pill{background:var(--card);border-radius:2rem;padding:.3rem 1.3rem;font:inherit;font-size:1.7rem;font-weight:700;box-shadow:0 .2rem .5rem rgba(0,0,0,.15);border:0;color:inherit}
+button.pill{cursor:pointer}
+#tk{position:relative;height:5.2rem;flex:none}
+#tk .r{display:flex;justify-content:space-between}
+.st{font-size:2.4rem;width:3rem;text-align:center;opacity:.4}
+.st.done{opacity:1}.st.on{opacity:1;animation:bn 1s infinite}
+#mv{position:absolute;top:3.1rem;width:3rem;text-align:center;font-size:2rem;left:calc(var(--p,0)*(100% - 3rem));transition:left 1s;animation:bn 1s infinite}
+@keyframes bn{50%{transform:translateY(-.4rem) scale(1.12)}}
+#m{flex:1;min-height:0;display:flex;flex-direction:column;gap:1rem}
+h1{font-size:4.2rem;margin:0}h2{font-size:2.2rem;margin:0;text-align:center}
+.c{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.4rem;text-align:center;font-size:2rem}
+.c p{margin:0}.big{font-size:7rem;animation:bn 1.2s infinite}
+.row{display:flex;gap:2rem}
+.btn{font:inherit;font-size:2.2rem;font-weight:700;padding:1rem 3rem;border:0;border-radius:2rem;background:var(--ac);color:#fff;box-shadow:0 .4rem 0 rgba(0,0,0,.25);cursor:pointer}
+.btn:active{transform:translateY(.3rem);box-shadow:none}
+.btn.ok{background:var(--ok)}.btn.no{background:var(--no)}.btn[disabled]{opacity:.5}
+.ar{display:grid;grid-template-columns:repeat(var(--c),1fr);gap:1rem;flex:1;min-height:0}
+.tg{background:var(--card);border:.25rem dashed var(--ln);border-radius:1.2rem;padding:.8rem;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:1.7rem;text-align:center;gap:.6rem}
+.tg.full{border-style:solid;border-color:var(--ok);background:var(--okbg)}
+.sl{min-height:4rem;min-width:70%;display:flex;justify-content:center}
+.pop{animation:pp .5s}@keyframes pp{50%{transform:scale(1.1)}}
+#tr{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;min-height:5rem;flex:none}
+.chip{background:var(--ac);color:#fff;border-radius:1.5rem;padding:.7rem 1.6rem;font-size:2rem;font-weight:700;touch-action:none;cursor:grab;user-select:none;box-shadow:0 .3rem 0 rgba(0,0,0,.25);position:relative}
+.chip.sel{outline:.35rem solid #ffd400}.chip.ok{background:var(--ok);cursor:default;box-shadow:none}
+.shake{animation:sk .4s}@keyframes sk{25%{transform:translateX(-1rem)}75%{transform:translateX(1rem)}}
+.card{background:var(--card);border-radius:2rem;padding:2rem 3rem;font-size:2.8rem;font-weight:700;max-width:80%;box-shadow:0 .3rem .8rem rgba(0,0,0,.15)}
+.gr{display:grid;grid-template-columns:repeat(8,1fr);grid-auto-rows:1fr;gap:.8rem;flex:1;min-height:0}
+.tile{font:inherit;font-size:2.6rem;font-weight:700;border:0;border-radius:1.2rem;background:var(--card);color:inherit;box-shadow:0 .3rem 0 rgba(0,0,0,.2);cursor:pointer}
+.tile.ok{background:var(--okbg)}.tile.no{background:#fbd5d6;color:#611}
+.op{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;width:90%}
+.op .btn{background:var(--card);color:var(--tx);text-align:left;font-size:2.2rem}
+.op .btn.ok{background:var(--ok);color:#fff}.op .btn.no{background:var(--no);color:#fff}
+#ov{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;z-index:50}
+#ov .c{flex:none;background:var(--card);border-radius:2.5rem;padding:2.5rem 4rem;max-width:75%;animation:pp .5s}
+.cf{position:fixed;top:-3rem;font-size:2.6rem;animation:fl 2.2s linear forwards;pointer-events:none;z-index:60}
+@keyframes fl{to{transform:translateY(115vh) rotate(400deg)}}
+</style>
+</head>
+<body>
+<div id="app">
+<div id="hud"><b>🧬 Petualangan Pencernaan</b><span class="pill" id="sc"></span><span class="pill" id="lf"></span><button class="pill" id="mt" onclick="mu=!mu;this.textContent=mu?'🔇':'🔊'">🔊</button></div>
+<div id="tk"><div class="r"></div><div id="mv">🍙</div></div>
+<main id="m"></main>
+</div>
+<script>
+const S=[
+{n:'Mulut',e:'👄',k:'d',c:3,t:'Seret organ ke tugasnya!',p:[['Gigi','Memotong dan menghaluskan makanan'],['Lidah','Mengecap rasa dan mendorong makanan'],['Air liur','Melunakkan makanan dan mencerna pati']],f:'Makanan yang dikunyah menjadi bolus, lalu ditelan.'},
+{n:'Kerongkongan',e:'🛝',k:'d',c:6,t:'Susun urutan perjalanan makanan!',p:[['Mulut','Urutan 1'],['Kerongkongan','Urutan 2'],['Lambung','Urutan 3'],['Usus halus','Urutan 4'],['Usus besar','Urutan 5'],['Anus','Urutan 6']],f:'Kerongkongan mendorong makanan dengan gerak peristaltik.'},
+{n:'Lambung',e:'🥣',k:'d',c:4,t:'Jodohkan organ dengan tugasnya!',p:[['Lambung','Mengaduk makanan dengan asam dan pepsin'],['Hati','Menghasilkan empedu'],['Pankreas','Menghasilkan enzim pencernaan'],['Kerongkongan','Menyalurkan makanan ke lambung']],f:'Di lambung makanan menjadi bubur yang disebut kimus.'},
+{n:'Usus Halus',e:'🌀',k:'t',q:[['Sari makanan diserap di usus halus.',1,'Betul, lewat jonjot usus (vili).'],['Usus besar menyerap paling banyak zat gizi.',0,'Usus besar menyerap air.'],['Empedu membantu mencerna lemak.',1,'Betul, empedu dibuat oleh hati.'],['Usus halus panjangnya sekitar 6–7 meter.',1,'Betul, panjang agar penyerapan maksimal.'],['Gerak peristaltik hanya ada di lambung.',0,'Peristaltik ada di seluruh saluran cerna.']],f:'Sari makanan masuk ke darah dan diedarkan ke seluruh tubuh.'},
+{n:'Usus Besar',e:'🚽',k:'d',c:4,t:'Jodohkan masalah dengan solusinya!',p:[['Usus besar','Menyerap air dan membentuk feses'],['Sembelit','Perbanyak sayur dan air putih'],['Diare','Minum banyak cairan dan oralit'],['Cacingan','Cuci tangan pakai sabun']],f:'Sisa makanan dibuang lewat anus sebagai feses. Jaga pencernaanmu!'}];
+const Q=`Proses pencernaan dimulai dari...|Mulut|Lambung|Usus|Hati|0
+Saluran penghubung mulut dan lambung...|Usus halus|Kerongkongan|Anus|Rektum|1
+Enzim amilase di air liur mencerna...|Protein|Lemak|Pati|Vitamin|2
+Organ penyerap sari makanan...|Lambung|Usus besar|Kerongkongan|Usus halus|3
+Organ yang menyerap air dari sisa makanan...|Usus besar|Mulut|Lambung|Hati|0
+Gerak meremas otot saluran cerna disebut...|Refleks|Peristaltik|Respirasi|Reaksi|1
+Zat asam di lambung adalah...|Cuka|Asam sitrat|Asam klorida (HCl)|Asam urat|2
+Empedu dihasilkan oleh...|Pankreas|Ginjal|Lambung|Hati|3
+Empedu disimpan di...|Kantung empedu|Usus buntu|Limpa|Jantung|0
+Pepsin di lambung mencerna...|Pati|Protein|Air|Serat|1
+Gigi yang berfungsi menyobek makanan...|Seri|Geraham|Taring|Bungsu|2
+Penutup agar makanan tak masuk saluran napas...|Lidah|Bibir|Uvula|Epiglotis|3
+Makanan yang telah dikunyah disebut...|Kimus|Bolus|Feses|Kilus|1
+Bubur makanan di lambung disebut...|Bolus|Feses|Kimus|Empedu|2
+Sisa makanan yang dibuang disebut...|Feses|Kimus|Bolus|Urine|0
+Penyakit akibat asam lambung berlebih...|Asma|Maag|Diare|Flu|1
+Buang air besar keras dan sulit disebut...|Diare|Maag|Sembelit|Kolera|2
+Mencegah sembelit dengan makan...|Gorengan|Permen|Mi instan|Sayur dan buah|3
+Cuci tangan dengan sabun mencegah...|Cacingan dan diare|Patah tulang|Rabun|Gigi berlubang|0
+Organ penghasil enzim dan insulin...|Hati|Pankreas|Limpa|Ginjal|1
+Jonjot usus (vili) berfungsi...|Menyimpan empedu|Menelan|Memperluas penyerapan|Mengaduk makanan|2
+Urutan yang benar...|Usus besar → lambung|Anus → usus|Lambung → mulut|Kerongkongan → lambung|3
+Contoh sumber karbohidrat...|Nasi|Telur|Minyak|Susu|0
+Contoh sumber protein...|Gula|Tempe|Garam|Teh|1
+Cara mengunyah yang baik...|Cepat saja|Langsung telan|Sampai halus|Sambil berlari|2
+Kebiasaan sehat untuk pencernaan...|Telat makan|Jajan sembarangan|Minum sedikit|Makan teratur|3
+Panjang usus halus kira-kira...|6–7 meter|1 meter|20 cm|50 meter|0
+Air putih penting untuk...|Membuat lapar|Melancarkan pencernaan|Merusak gigi|Menghambat usus|1
+Pencernaan kimiawi dibantu oleh...|Gunting|Magnet|Enzim|Cermin|2
+Contoh pencernaan mekanik...|Pepsin|Asam lambung|Empedu|Mengunyah makanan|3
+Zat gizi yang diserap masuk ke...|Darah|Paru-paru|Tulang|Rambut|0`.split('\n').map(l=>{const a=l.split('|');return[a[0],a.slice(1,5),+a[5]]});
+
+let sc=0,li=3,si=0,mu=false,ac,sel=null,left=0,tq=0,qd=[],qs=0,busy=0;
+const $=s=>document.querySelector(s),M=$('#m'),sh=a=>[...a].sort(()=>Math.random()-.5);
+$('#tk .r').innerHTML=['👄','🛝','🥣','🌀','🚽','🏆'].map(e=>`<span class="st">${e}</span>`).join('');
+function tn(f,d,ty='sine',s=0,v=.18){if(mu)return;try{ac=ac||new AudioContext();const o=ac.createOscillator(),g=ac.createGain(),t=ac.currentTime+s;o.type=ty;o.frequency.value=f;g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.001,t+d);o.connect(g);g.connect(ac.destination);o.start(t);o.stop(t+d)}catch(e){}}
+const sf={ok:()=>[523,659,784].forEach((f,i)=>tn(f,.18,'triangle',i*.09)),no:()=>{tn(180,.35,'sawtooth');tn(120,.35,'sawtooth',.12)},win:()=>[523,659,784,1047,1319].forEach((f,i)=>tn(f,.25,'triangle',i*.12)),tap:()=>tn(700,.06,'square',0,.08)};
+function hud(){$('#sc').textContent='⭐ '+sc;$('#lf').textContent='❤️'.repeat(li)+'🖤'.repeat(3-li);document.querySelectorAll('.st').forEach((e,i)=>e.className='st'+(i<si?' done':i==si?' on':''));$('#mv').style.setProperty('--p',si/5)}
+function boom(){for(let i=0;i<26;i++){const s=document.createElement('span');s.className='cf';s.textContent=['⭐','🎉','🍎','✨'][i%4];s.style.left=Math.random()*95+'vw';s.style.animationDelay=Math.random()*.6+'s';document.body.appendChild(s);setTimeout(()=>s.remove(),3000)}}
+function ov(h){cl();const d=document.createElement('div');d.id='ov';d.innerHTML=`<div class="c">${h}</div>`;document.body.appendChild(d)}
+function cl(){const o=$('#ov');o&&o.remove()}
+function start(){sc=0;li=3;si=0;qs=0;qd=Array(Q.length).fill(null);hud();M.innerHTML=`<div class="c"><div class="big">🍎➡️🧒</div><h1>Petualangan Sistem Pencernaan</h1><p>Antar makanan menyusuri tubuh! Kumpulkan ⭐ dan jaga ❤️</p><button class="btn" onclick="go()">▶ MULAI</button></div>`}
+function go(){cl();li=3;si<5?stage():quiz()}
+function stage(){const g=S[si];hud();if(g.k=='t'){tq=0;return tf()}
+M.innerHTML=`<h2>${g.e} ${g.n}: ${g.t}</h2><div class="ar" style="--c:${g.c}">${g.p.map((p,i)=>`<div class="tg" data-i="${i}">${p[1]}<div class="sl"></div></div>`).join('')}</div><div id="tr">${sh(g.p.map((_,i)=>i)).map(i=>`<div class="chip" data-i="${i}">${g.p[i][0]}</div>`).join('')}</div>`;
+left=g.p.length;sel=null;document.querySelectorAll('.chip').forEach(bind)}
+M.addEventListener('click',e=>{const t=e.target.closest('.tg');if(t&&sel)tryp(sel,t)});
+function bind(ch){ch.onpointerdown=e=>{if(ch.classList.contains('ok'))return;sf.tap();ch.setPointerCapture(e.pointerId);const x=e.clientX,y=e.clientY;let mv=0;ch.style.zIndex=9;
+ch.onpointermove=e=>{const dx=e.clientX-x,dy=e.clientY-y;if(Math.abs(dx)+Math.abs(dy)>12)mv=1;if(mv)ch.style.transform=`translate(${dx}px,${dy}px) scale(1.1)`};
+ch.onpointerup=e=>{ch.onpointermove=ch.onpointerup=null;ch.style.transform='';ch.style.zIndex='';
+if(!mv){sel&&sel.classList.remove('sel');sel=ch;ch.classList.add('sel');return}
+ch.style.pointerEvents='none';const t=document.elementFromPoint(e.clientX,e.clientY);ch.style.pointerEvents='';const g=t&&t.closest('.tg');if(g)tryp(ch,g)}}}
+function tryp(ch,t){if(t.classList.contains('full'))return;if(ch.dataset.i==t.dataset.i){t.classList.add('full','pop');t.querySelector('.sl').appendChild(ch);ch.classList.remove('sel');ch.classList.add('ok');sel=null;sc+=10;sf.ok();hud();setTimeout(()=>t.classList.remove('pop'),500);if(!--left)done()}else{sel&&sel.classList.remove('sel');sel=null;ch.classList.add('shake');setTimeout(()=>ch.classList.remove('shake'),400);hit()}}
+function hit(){li--;sf.no();hud();if(li<=0)setTimeout(()=>{sf.no();ov(`<h1>💔 Nyawa habis!</h1><p>Tenang, ayo coba lagi!</p><button class="btn" onclick="cl();li=3;stage()">🔄 Ulangi stasiun</button>`)},500)}
+function done(){const g=S[si];sc+=20;si++;hud();sf.win();boom();setTimeout(()=>ov(`<h1>🎉 Stasiun ${g.n} selesai! +20 ⭐</h1><p>💡 ${g.f}</p><button class="btn" onclick="go()">Lanjut ➡️</button>`),700)}
+function tf(){const g=S[si],s=g.q[tq];busy=0;M.innerHTML=`<h2>${g.e} ${g.n}: Benar atau Salah? (${tq+1}/${g.q.length})</h2><div class="c"><div class="card" id="cd">${s[0]}</div><div class="row"><button class="btn ok" onclick="ans(1)">✔ BENAR</button><button class="btn no" onclick="ans(0)">✘ SALAH</button></div><p id="kt">&nbsp;</p></div>`}
+function ans(v){if(busy)return;const g=S[si],s=g.q[tq];if(v==s[1]){busy=1;sc+=10;sf.ok();hud();$('#kt').textContent='✅ '+s[2];setTimeout(()=>{++tq<g.q.length?tf():done()},1600)}else{$('#kt').textContent='❌ Coba pikirkan lagi!';$('#cd').classList.add('shake');setTimeout(()=>$('#cd').classList.remove('shake'),400);hit()}}
+function quiz(){hud();if(qd.every(x=>x!=null))return fin();M.innerHTML=`<h2>🏆 KUIS AKHIR — Siswa maju sesuai nomor absen! (Benar: ${qs})</h2><div class="gr">${Q.map((_,i)=>`<button class="tile ${qd[i]==1?'ok':qd[i]==0?'no':''}" ${qd[i]!=null?'disabled':''} onclick="ask(${i})">${qd[i]==1?'✅':qd[i]==0?'❌':i+1}</button>`).join('')}</div><button class="btn" style="align-self:center;padding:.5rem 2rem;font-size:1.6rem" onclick="fin()">🏁 Selesai</button>`}
+function ask(i){sf.tap();busy=0;const q=Q[i];M.innerHTML=`<h2>Nomor ${i+1}</h2><div class="c"><div class="card">${q[0]}</div><div class="op">${q[1].map((o,j)=>`<button class="btn" id="o${j}" onclick="pick(${i},${j})">${'ABCD'[j]}. ${o}</button>`).join('')}</div></div>`}
+function pick(i,j){if(busy)return;busy=1;const k=Q[i][2];$('#o'+k).classList.add('ok');if(j==k){qd[i]=1;qs++;sc+=5;sf.ok()}else{qd[i]=0;$('#o'+j).classList.add('no');sf.no()}hud();setTimeout(quiz,1800)}
+function fin(){sf.win();boom();const st=qs>=Q.length*.8?'⭐⭐⭐':qs>=Q.length*.5?'⭐⭐':'⭐';M.innerHTML=`<div class="c"><div class="big">🏆</div><h1>Petualangan Selesai!</h1><p>Total ⭐ ${sc} · Kuis benar ${qs}/${qd.filter(x=>x!=null).length}</p><p style="font-size:4rem">${st}</p><button class="btn" onclick="start()">🔄 Main Lagi</button></div>`}
+start();
+</script>
+</body>
+</html>
